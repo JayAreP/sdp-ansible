@@ -21,7 +21,7 @@ export SDPPASS="password"
 export SDPHOST="10.10.10.200"
 ```
 
-You can then use the functions in the module manifest to perform the desired operations. 
+You can then invoke the deployment meta in any desired playbook. 
 ```yaml
 - hosts: localhost
 
