@@ -4,6 +4,7 @@
 from krest import EndPoint
 from ansible.module_utils.basic import *
 import json
+import os
 
 try:
     import krest
@@ -16,9 +17,6 @@ sdpclass = "hosts"
 
 def main():
   module_args = dict(
-    username=dict(type='str', required=True),
-    password=dict(type='str', required=True, no_log=True),
-    hostname=dict(type='str', required=True),
     name=dict(type='str', required=True),
     type=dict(type='str', required=True),
     hostgroup=dict(type='str', required=False)
@@ -30,9 +28,9 @@ def main():
   vars = module.params
 
 # temp username, password, server vars
-  username = vars["username"]
-  password = vars["password"]
-  server = vars["hostname"]
+  sdpuser = os.environ.get('SDPUSER', '-1')
+  sdppass = os.environ.get('SDPPASS', '-1')
+  sdphost = os.environ.get('SDPHOST', '-1')
 
 # KREST Check, fail if no module. 
   if not krestload:
@@ -41,7 +39,7 @@ def main():
 # Connect to server
 
   try:
-    sdp = krest.EndPoint(server, username, password, ssl_validate=False)
+    sdp = krest.EndPoint(sdphost, sdpuser, sdppass, ssl_validate=False)
   except Exception as error:
     module.fail_json(msg=str(error))
 
