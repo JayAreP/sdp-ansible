@@ -1,5 +1,5 @@
 # Silk Data Pod (formerly Kaminario K2) Ansible Modules
-## This suite of modules is still pre-release and undergoing development. 
+## This suite of modules is still being developed and is in no way recommended for use. 
 
 ### Installation 
 For now, clone this repo and copy the modules to `/usr/share/ansible/plugins/modules` or `~/.ansible/plugins/modules`
