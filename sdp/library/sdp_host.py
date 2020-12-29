@@ -1,5 +1,71 @@
 #!/usr/bin/python
 
+DOCUMENTATION = r'''
+---
+module: sdp_host
+
+short_description: Module for host objects on the Silk SDP platform. 
+
+version_added: "0.1.1"
+
+description: This is the module you would use to declare a host object on any Silk SDP deployment. 
+
+options:
+    name:
+        description: The name for the host object
+        required: true
+        type: str
+    type:
+        description: The host type. Linux, Windows, or ESX
+        required: true
+        type: str
+    hostgroup:
+        description: The name of the existing host group to include this host object in. 
+        required: false
+        type: str
+    iqn:
+        description: The initiator name (iqn) for the host object. Only valid on SDPs configured for iSCSI. 
+        required: false
+        type: str
+    pwwn:
+        description: The Port WWN for the host object. Only valid on SDPs configured for FibreChannel. 
+        required: false
+        type: str
+
+
+# Specify this value according to your collection
+# in format of namespace.collection.doc_fragment_name
+extends_documentation_fragment:
+    - my_namespace.my_collection.my_doc_fragment_name
+
+author:
+    - Your Name (@JayAreP)
+'''
+
+EXAMPLES = r'''
+# Create a host object.
+- name: "Create Host"
+  sdp_host: 
+    name: "testHost01"
+    type: "Linux"
+    hostgroup: "testGroup01"
+    pwwn: 00:11:22:33:44:55:66:77
+'''
+
+RETURN = r'''
+# These are examples of possible return values, and in general should use other names for return values.
+original_message:
+    description: The original name param that was passed in.
+    type: str
+    returned: always
+    sample: 'hello world'
+message:
+    description: The output message that the test module generates.
+    type: str
+    returned: always
+    sample: 'goodbye'
+'''
+
 # Import the SDP module here as well. 
 from krest import EndPoint
 from ansible.module_utils.basic import *
@@ -19,6 +85,8 @@ def main():
   module_args = dict(
     name=dict(type='str', required=True),
     type=dict(type='str', required=True),
+    iqn=dict(type='str', required=False),
+    pwwn=dict(type='list', required=False),
     hostgroup=dict(type='str', required=False)
   )
 
@@ -60,7 +128,6 @@ def main():
         module.fail_json(msg=str(error))
     
     changed=True
-
   else:
     sdpobj = find.hits[0]
     changed=False
@@ -87,6 +154,25 @@ def main():
     sdpobj.save()
     changed=True
 
+  if vars["pwwn"]:
+    portclass = "host_fc_ports"
+    for i in vars["pwwn"]:
+      findports = sdp.search(portclass, pwwn__in=i)
+      if len(findports.hits) == 0:
+          port_request = sdp.new(portclass)
+          port_request.pwwn = i
+          port_request.host = sdpobj
+          port_request.save()
+          changed=True
+      else:
+          portobj = findports.hits[0]
+          if portobj.host != sdpobj:
+            portobj.host = sdpobj
+            portobj.save()
+            changed=True
+          else:
+            changed=False
+
 # ------ No further change operations beyond this point. ------
 # Once saved, invoke a find operation for the just-created object and use that to respond. 
   find = sdp.search(sdpclass, name=obj_request.name)
@@ -99,6 +185,9 @@ def main():
       response["hostgroup"] = sdpobj.host_group.name
     else:
       response["hostgroup"] = ""
+    
+    #if vars["pwwn"]:
+    #  response["pwwn"] = vars["pwwn"]
 
   module.exit_json(
     changed=changed,
