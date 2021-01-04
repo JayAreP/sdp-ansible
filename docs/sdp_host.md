@@ -35,13 +35,13 @@ This example creates a host object named "WindowsHost" with no further initiator
 ```yaml
 sdp_host: 
     name: "windowsHost"
-    type: "Linux"
+    type: "Windows"
 ```
 
 You may do this in cases where the iqn is not yet know, and update it at a later date once the iqn has been resolved:
 ```yaml
 sdp_host: 
     name: "windowsHost"
-    type: "Linux"
+    type: "Windows"
     iqn: "iqn.1991-05.microsoft:windowshost"
 ```
