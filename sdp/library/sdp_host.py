@@ -28,9 +28,9 @@ options:
         required: false
         type: str
     pwwn:
-        description: The Port WWN for the host object. Only valid on SDPs configured for FibreChannel. 
+        description: The Port WWNs for the host object. Only valid on SDPs configured for FibreChannel. 
         required: false
-        type: str
+        type: list
 
 
 # Specify this value according to your collection
@@ -186,8 +186,8 @@ def main():
     else:
       response["hostgroup"] = ""
     
-    #if vars["pwwn"]:
-    #  response["pwwn"] = vars["pwwn"]
+    if vars["pwwn"]:
+      response["pwwn"] = vars["pwwn"]
 
   module.exit_json(
     changed=changed,
