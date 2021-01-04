@@ -1,4 +1,4 @@
-# sdp_hosts
+# sdp_host
 
 This module allows you to create and manage host objects on the SDP platform. 
 
