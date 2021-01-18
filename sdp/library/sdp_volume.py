@@ -72,11 +72,17 @@ def main():
     sdpobj = find.hits[0]
     if sdpobj.volume_group.name != vars["volumegroup"]:
       sdpobj.volume_group = vg
-      sdpobj.save()
+      try:
+        sdpobj.save()
+      except Exception as error:
+        module.fail_json(msg=str(error))
       changed=True
     elif sdpobj.size < size:
       sdpobj.size = size
-      sdpobj.save()
+      try:
+        sdpobj.save()
+      except Exception as error:
+        module.fail_json(msg=str(error))
       changed=True
     else:
       changed=False

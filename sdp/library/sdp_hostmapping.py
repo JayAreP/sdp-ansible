@@ -83,10 +83,10 @@ def main():
         result = obj_request.save()
     except Exception as error:
         module.fail_json(msg=str(error))
-    changed=True
+    changed = True
   else:
       result = sdpobj
-      changed=False
+      changed = False
     
 # ------ No further change operations beyond this point. ------
 # Once saved, invoke a find operation for the just-created object and use that to respond. 

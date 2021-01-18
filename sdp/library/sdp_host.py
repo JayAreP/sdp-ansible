@@ -173,6 +173,25 @@ def main():
           else:
             changed=False
 
+  if vars["iqn"]:
+    iqn = vars["iqn"]
+    portclass = "host_iqns"
+    findports = sdp.search(portclass, pwwn__in=iqn)
+    if len(findports.hits) == 0:
+        port_request = sdp.new(portclass)
+        port_request.iqn = iqn
+        port_request.host = sdpobj
+        port_request.save()
+        changed=True
+    else:
+        portobj = findports.hits[0]
+        if portobj.host != sdpobj:
+          portobj.host = sdpobj
+          portobj.save()
+          changed=True
+        else:
+          changed=False
+
 # ------ No further change operations beyond this point. ------
 # Once saved, invoke a find operation for the just-created object and use that to respond. 
   find = sdp.search(sdpclass, name=obj_request.name)

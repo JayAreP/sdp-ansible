@@ -72,28 +72,40 @@ def main():
     if vars["snapshots"]:
       if sdpobj.num_snapshots != vars["snapshots"]:
         sdpobj.num_snapshots = vars["snapshots"]
-        sdpobj.save()
+        try:
+          sdpobj.save()
+        except Exception as error:
+          module.fail_json(msg=str(error))
         changed=True
       else:
         changed=False
     if vars["weeks"]:
       if sdpobj.weeks != vars["weeks"]:
         sdpobj.weeks = vars["weeks"]
-        sdpobj.save()
+        try:
+          sdpobj.save()
+        except Exception as error:
+          module.fail_json(msg=str(error))
         changed=True
       else:
         changed=False
     if vars["days"]:
       if sdpobj.days != vars["days"]:
         sdpobj.days = vars["days"]
-        sdpobj.save()
+        try:
+          sdpobj.save()
+        except Exception as error:
+          module.fail_json(msg=str(error))
         changed=True
       else:
         changed=False
     if vars["hours"]:
       if sdpobj.hours != vars["hours"]:
         sdpobj.hours = vars["hours"]
-        sdpobj.save()
+        try:
+          sdpobj.save()
+        except Exception as error:
+          module.fail_json(msg=str(error))
         changed=True
       else:
         changed=False

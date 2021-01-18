@@ -71,14 +71,20 @@ def main():
     if vars["allowDifferentHostTypes"]:
       if sdpobj.allow_different_host_types != vars["allowDifferentHostTypes"]:
         sdpobj.allow_different_host_types = vars["allowDifferentHostTypes"]
-        sdpobj.save()
+        try:
+          sdpobj.save()
+        except Exception as error:
+          module.fail_json(msg=str(error))
         changed=True
       else:
         changed=False
     if vars["description"]:
       if sdpobj.description != vars["description"]:
         sdpobj.description = vars["description"]
-        sdpobj.save()
+        try:
+          sdpobj.save()
+        except Exception as error:
+          module.fail_json(msg=str(error))
         changed=True
       else:
         changed=False

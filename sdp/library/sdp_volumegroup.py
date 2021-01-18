@@ -69,11 +69,17 @@ def main():
     sdpobj = find.hits[0]
     if sdpobj.is_dedup != vars["dedupe"]:
       sdpobj.is_dedup = vars["dedupe"]
-      sdpobj.save()
+      try:
+        sdpobj.save()
+      except Exception as error:
+        module.fail_json(msg=str(error))
       changed=True
     elif sdpobj.quota != size:
       sdpobj.quota = size
-      sdpobj.save()
+      try:
+        sdpobj.save()
+      except Exception as error:
+        module.fail_json(msg=str(error))
       changed=True
     else:
       changed=False
