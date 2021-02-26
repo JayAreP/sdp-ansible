@@ -22,4 +22,3 @@ sdp_volume:
     sizeInGB: 40
     volumegroup: "volumeGroup01"
 ```
-

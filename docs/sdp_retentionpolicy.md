@@ -29,6 +29,6 @@ This example creates a retention policy object named "Retention Policy 01" that 
 ```yaml
 sdp_retentionpolicy: 
     name: "Retention Policy 02"
-    weeeks: 4
+    weeks: 4
 ```
 

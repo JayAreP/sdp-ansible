@@ -1,5 +1,71 @@
 #!/usr/bin/python
 
+DOCUMENTATION = r'''
+---
+module: sdp_host
+
+short_description: Module for volume objects on the Silk SDP platform. 
+
+version_added: "0.1.1"
+
+description: This is the module you would use to declare a volume object on any Silk SDP deployment. 
+
+options:
+    name:
+        description: The name for the volume object
+        required: true
+        type: str
+    sizeInGB:
+        description: The size of the volume in GB
+        required: true
+        type: int
+    volumegroup:
+        description: The name of the existing volume group to include this volume object in. 
+        required: false
+        type: str
+
+# Specify this value according to your collection
+# in format of namespace.collection.doc_fragment_name
+extends_documentation_fragment:
+    - my_namespace.my_collection.my_doc_fragment_name
+
+author:
+    - Your Name (@JayAreP)
+'''
+
+EXAMPLES = r'''
+# Create a host object.
+- name: "Create Volume"
+  sdp_volume: 
+    name: "volume06"
+    sizeInGB: 40
+    volumegroup: "vg2"
+'''
+
+RETURN = r'''
+# These are examples of possible return values, and in general should use other names for return values.
+id:
+    description: The id of the working object.
+    type: str
+    returned: always
+    sample: '44'
+name:
+    description: The name of the working object.
+    type: str
+    returned: always
+    sample: 'volume06'
+size:
+    description: The size of the working object in bytes.
+    type: str
+    returned: always
+    sample: '41984000'
+volumegroup:
+    description: The name of the Volume Group of the working object.
+    type: str
+    returned: sometimes
+    sample: 'vg2'
+'''
+
 # Import the SDP module here as well. 
 from krest import EndPoint
 from ansible.module_utils.basic import *
@@ -62,7 +128,7 @@ def main():
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
     try:
-        obj_request.save()
+        sdpobj = obj_request.save()
     except Exception as error:
         module.fail_json(msg=str(error))
     

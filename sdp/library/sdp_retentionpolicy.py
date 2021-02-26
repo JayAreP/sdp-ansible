@@ -61,7 +61,7 @@ def main():
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
     try:
-        obj_request.save()
+        sdpobj = obj_request.save()
     except Exception as error:
         module.fail_json(msg=str(error))
     

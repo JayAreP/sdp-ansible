@@ -1,5 +1,64 @@
 #!/usr/bin/python
 
+DOCUMENTATION = r'''
+---
+module: sdp_hostgroup
+
+short_description: Module for host group objects on the Silk SDP platform. 
+
+version_added: "0.1.1"
+
+description: This is the module you would use to declare a host group object on any Silk SDP deployment. 
+
+options:
+    name:
+        description: The name for the host group object
+        required: true
+        type: str
+    description:
+        description: Description for the host group. 
+        required: false
+        type: str
+    allowDifferentHostTypes:
+        description: Flag for allowing different host times. 
+        required: false
+        type: bool
+
+author:
+    - J.R. Phillips (@JayAreP)
+'''
+
+EXAMPLES = r'''
+# Create a host group object.
+- name: "Create Test Host Group"
+    sdp_hostgroup:
+        name: "ATHG01"
+        description: "test host group"
+        allowDifferentHostTypes: True
+'''
+
+RETURN = r'''
+# These are examples of possible return values, and in general should use other names for return values.
+id:
+    description: The id of the working object.
+    type: str
+    returned: always
+    sample: '44'
+name:
+    description: The name of the working object.
+    type: str
+    returned: always
+    sample: hostgroup06
+description:
+    description: Description for the host group. 
+    returned: sometimes
+    sample: "Group description"
+allowDifferentHostTypes:
+    description: Flag for allowing different host times. 
+    returned: sometimes
+    sample: False
+'''
+
 # Import the SDP module here as well. 
 from krest import EndPoint
 from ansible.module_utils.basic import *
@@ -60,7 +119,7 @@ def main():
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
     try:
-        obj_request.save()
+        sdpobj = obj_request.save()
     except Exception as error:
         module.fail_json(msg=str(error))
     

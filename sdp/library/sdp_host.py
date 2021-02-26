@@ -39,7 +39,7 @@ extends_documentation_fragment:
     - my_namespace.my_collection.my_doc_fragment_name
 
 author:
-    - Your Name (@JayAreP)
+    - J.R. Phillips (@JayAreP)
 '''
 
 EXAMPLES = r'''
@@ -49,21 +49,38 @@ EXAMPLES = r'''
     name: "testHost01"
     type: "Linux"
     hostgroup: "testGroup01"
-    pwwn: 00:11:22:33:44:55:66:77
+    pwwn: 
+      - 00:11:22:33:44:55:66:77
+      - 00:11:22:33:44:55:66:88
 '''
 
 RETURN = r'''
 # These are examples of possible return values, and in general should use other names for return values.
-original_message:
-    description: The original name param that was passed in.
+id:
+    description: The id of the working object.
     type: str
     returned: always
-    sample: 'hello world'
-message:
-    description: The output message that the test module generates.
+    sample: '44'
+name:
+    description: The name of the working object.
     type: str
     returned: always
-    sample: 'goodbye'
+    sample: 'host06'
+volumegroup:
+    description: The name of the Host Group of the working object.
+    type: str
+    returned: sometimes
+    sample: 'hg2'
+pwwn:
+    description: The PWWN list of the working object in bytes.
+    type: list
+    returned: sometimes
+    sample: '41984000'
+iqn:
+    description: The iqn of the working object.
+    type: str
+    returned: sometimes
+    sample: 'vg2'
 '''
 
 # Import the SDP module here as well. 
@@ -123,7 +140,7 @@ def main():
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
     try:
-        obj_request.save()
+        sdpobj = obj_request.save()
     except Exception as error:
         module.fail_json(msg=str(error))
     
@@ -207,6 +224,9 @@ def main():
     
     if vars["pwwn"]:
       response["pwwn"] = vars["pwwn"]
+
+    if vars["iqn"]:
+      response["iqn"] = vars["iqn"]
 
   module.exit_json(
     changed=changed,

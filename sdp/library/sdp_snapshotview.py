@@ -13,14 +13,15 @@ except ImportError:
     krestload = False
 
 # Declare the class string 
-sdpclass = "volume_groups"
+sdpclass = "snapshots"
 
 def main():
   module_args = dict(
     name=dict(type='str', required=True),
-    dedupe=dict(type='bool', required=False, default=True),
-    capacityPolicy=dict(type='bool', required=False),
-    quotaInGB=dict(type='int', required=False, default=0)
+    snapshot=dict(type='str', required=True),
+    retentionpolicy=dict(type='str', required=True),
+    exposable=dict(type='bool', required=False, default=True),
+    deletable=dict(type='bool', required=False, defaul=True)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -45,64 +46,69 @@ def main():
     module.fail_json(msg=str(error))
 
 # ----- Below here is specific endpoint ops ------
-# Create the volume object (do not save yet)
+# Create the object (do not save yet)
   
-  size = vars["quotaInGB"]*2**20
+# Set up all of the object data
+# Snapshot name (for searching)
+  finalsnapname = vars["snapshot"] + ':' + vars["name"]
+
   obj_request = sdp.new(sdpclass)
-  obj_request.name = vars["name"]
-  obj_request.is_dedup = vars["dedupe"]
-  obj_request.quota = size
+  obj_request.short_name = vars["name"]
+
+# vg
+
+  snapsearch = sdp.search('snapshots', name=vars["snapshot"])
+  if snapsearch.total == 1:
+    vg = snapsearch.hits[0]
+  elif snapsearch.total == 0:
+    errormessage = "The snapshot does not exist"
+    module.fail_json(msg=str(errormessage))
+
+  obj_request.source = vg
+
+# rp
+
+  rpsearch = sdp.search('retention_policies', name=vars["retentionpolicy"])
+  if rpsearch.total == 1:
+    rp = rpsearch.hits[0]
+  elif rpsearch.total == 0:
+    errormessage = "The retntion policy does not exist"
+    module.fail_json(msg=str(errormessage))
+  
+  obj_request.retention_policy = rp
+
+# Set up the retention policy vars["retentionpolicy"]
 
 # Check to see if object already exists. 
-  find = sdp.search(sdpclass, name=obj_request.name)
+  find = sdp.search(sdpclass, name=finalsnapname)
 
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
     try:
-        sdpobj = obj_request.save()
+        obj_request.save()
     except Exception as error:
         module.fail_json(msg=str(error))
     
     changed=True
 # Otherwise, check the current object's secondary parameters against the request, and adjust as needed. 
-  else:
-    sdpobj = find.hits[0]
-    if sdpobj.is_dedup != vars["dedupe"]:
-      sdpobj.is_dedup = vars["dedupe"]
-      try:
-        sdpobj.save()
-      except Exception as error:
-        module.fail_json(msg=str(error))
-      changed=True
-    elif sdpobj.quota != size:
-      sdpobj.quota = size
-      try:
-        sdpobj.save()
-      except Exception as error:
-        module.fail_json(msg=str(error))
-      changed=True
-    else:
-      changed=False
-
-# Check variables that may change here (size, group membership, etc)
-
 
 # ------ No further change operations beyond this point. ------
 # Once saved, invoke a find operation for the just-created object and use that to respond. 
-  find = sdp.search(sdpclass, name=obj_request.name)
+  find = sdp.search(sdpclass, name=finalsnapname)
   sdpobj = find.hits[0]
   if len(find.hits) == 1:
     response = {}
     response["id"] = sdpobj.id
     response["name"] = sdpobj.name
-    response["quota"] = sdpobj.quota
-    response["dedupe"] = sdpobj.is_dedup
+    response["retentionpolicy"] = sdpobj.retention_policy.name
+    response["deletable"] = sdpobj.is_auto_deleteable
+    response["exposable"] = sdpobj.is_exposable
+
 
   module.exit_json(
     changed=changed,
     meta=response
   )
-
 
 if __name__ == '__main__':
     main()
