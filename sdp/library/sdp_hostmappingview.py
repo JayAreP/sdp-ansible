@@ -71,7 +71,7 @@ sdpclass = "mappings"
 def main():
   module_args = dict(
     hostname=dict(type='str', required=True),
-    snapshot=dict(type='str', required=True)
+    snapshotview=dict(type='str', required=True)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -100,19 +100,19 @@ def main():
   
   obj_request = sdp.new(sdpclass)
 
-  # Store the volume
-  volreqclass = "volumes"
-  vols = sdp.search(volreqclass, name=vars["volumename"])
+  # Store the snapshot view
+  viewrequest = "snapshots"
+  views = sdp.search(viewrequest, name=vars["snapshotview"])
 
   # Store the host
   hostreqclass = "hosts"
   hosts = sdp.search(hostreqclass, name=vars["hostname"])
 
-  if len(vols.hits) == 1:
-      vol = vols.hits[0]
-      obj_request.volume = vol
+  if len(views.hits) == 1:
+      view = views.hits[0]
+      obj_request.volume = view
   else:
-      error = "Volume {} was not found.".format(vars["volumename"])
+      error = "Snapshot view {} was not found.".format(vars["snapshotview"])
       module.fail_json(msg=str(error))
 
   if len(hosts.hits) == 1:
@@ -124,9 +124,9 @@ def main():
 
   find = sdp.search(sdpclass, __limit=9999)
   for f in find.hits:
-    if f.host == host and f.volume == vol:
-        sdpobj = f
-        break
+      if f.host.id == host.id and f.volume.id == view.id:
+          sdpobj = f
+          break
 
 # If it does not, then save the above object as is.
   try: sdpobj
@@ -134,9 +134,9 @@ def main():
   if sdpobj is None:
     try:
         result = obj_request.save()
+        changed = True
     except Exception as error:
         module.fail_json(msg=str(error))
-    changed = True
   else:
       result = sdpobj
       changed = False

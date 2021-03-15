@@ -19,9 +19,8 @@ def main():
   module_args = dict(
     name=dict(type='str', required=True),
     snapshot=dict(type='str', required=True),
-    retentionpolicy=dict(type='str', required=True),
-    exposable=dict(type='bool', required=False, default=True),
-    deletable=dict(type='bool', required=False, defaul=True)
+    volumegroup=dict(type='str', required=True),
+    retentionpolicy=dict(type='str', required=True)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -50,21 +49,20 @@ def main():
   
 # Set up all of the object data
 # Snapshot name (for searching)
-  finalsnapname = vars["snapshot"] + ':' + vars["name"]
 
   obj_request = sdp.new(sdpclass)
   obj_request.short_name = vars["name"]
 
-# vg
-
-  snapsearch = sdp.search('snapshots', name=vars["snapshot"])
+# snapbase
+  finalsnapname = vars["volumegroup"] + ':' + vars["snapshot"]
+  snapsearch = sdp.search(sdpclass, name=finalsnapname)
   if snapsearch.total == 1:
-    vg = snapsearch.hits[0]
+    snapbase = snapsearch.hits[0]
   elif snapsearch.total == 0:
     errormessage = "The snapshot does not exist"
     module.fail_json(msg=str(errormessage))
 
-  obj_request.source = vg
+  obj_request.source = snapbase
 
 # rp
 
@@ -77,24 +75,29 @@ def main():
   
   obj_request.retention_policy = rp
 
-# Set up the retention policy vars["retentionpolicy"]
+# Set the exposable flag - required for views
+
+  obj_request.is_exposable = True
 
 # Check to see if object already exists. 
-  find = sdp.search(sdpclass, name=finalsnapname)
+  finalviewname = vars["volumegroup"] + ':' + vars["name"]
+  find = sdp.search(sdpclass, name=finalviewname)
 
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
     try:
         obj_request.save()
+        changed=True
     except Exception as error:
         module.fail_json(msg=str(error))
+  else:
+    changed=False
     
-    changed=True
 # Otherwise, check the current object's secondary parameters against the request, and adjust as needed. 
 
 # ------ No further change operations beyond this point. ------
 # Once saved, invoke a find operation for the just-created object and use that to respond. 
-  find = sdp.search(sdpclass, name=finalsnapname)
+  find = sdp.search(sdpclass, name=finalviewname)
   sdpobj = find.hits[0]
   if len(find.hits) == 1:
     response = {}

@@ -71,9 +71,9 @@ def main():
 
   find = sdp.search(sdpclass, __limit=9999)
   for f in find.hits:
-    if f.host == host and f.volume == vol:
-        sdpobj = f
-        break
+      if f.host.id == host.id and f.volume.id == vol.id:
+          sdpobj = f
+          break
 
 # If it does not, then save the above object as is.
   try: sdpobj

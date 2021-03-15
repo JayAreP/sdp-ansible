@@ -86,10 +86,12 @@ def main():
   if len(find.hits) == 0:
     try:
         obj_request.save()
+        changed=True
     except Exception as error:
         module.fail_json(msg=str(error))
+  else:
+    changed=False
     
-    changed=True
 # Otherwise, check the current object's secondary parameters against the request, and adjust as needed. 
 
 # ------ No further change operations beyond this point. ------
