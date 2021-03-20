@@ -15,7 +15,7 @@ The following parameters are permitted.
 
 ## Examples
 ### 1. 
-This example creates a host object named "LinuxHost" with 3 PWWNs. 
+This example creates a view of the snapshot `ATSnap01` for the volume group `ATVG01`. 
 ```yaml
 sdp_snapshotview: 
     name: "ATSnap01-view"
