@@ -17,7 +17,7 @@ The following parameters are permitted.
 
 ## Examples
 ### 1. 
-This example creates a retention policy object named "Retention Policy 01" that retains a limit of 5 snapshots. 
+This example creates a retention policy object named `Retention Policy 01` that retains a limit of 5 snapshots. 
 ```yaml
 sdp_retentionpolicy: 
     name: "Retention Policy 01"
@@ -25,7 +25,7 @@ sdp_retentionpolicy:
 ```
 
 ### 2. 
-This example creates a retention policy object named "Retention Policy 01" that retains a snapshots for 4 weeks. 
+This example creates a retention policy object named `Retention Policy 01` that retains a snapshots for 4 weeks. 
 ```yaml
 sdp_retentionpolicy: 
     name: "Retention Policy 02"

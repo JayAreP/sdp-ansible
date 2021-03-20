@@ -13,7 +13,7 @@ The following parameters are permitted.
 
 ## Examples
 ### 1. 
-This example creates a host object named "LinuxHost" with 3 PWWNs. 
+This example creates a host object named `LinuxHost` with 3 PWWNs. 
 ```yaml
 sdp_hostmapping:
     hostgroupname: "Host Group 01"

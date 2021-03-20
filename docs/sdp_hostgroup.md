@@ -15,7 +15,7 @@ The following parameters are permitted.
 
 ## Examples
 ### 1. 
-This example creates a host group object named "HostGroup01" with a description and a restriction for a singular host type. 
+This example creates a host group object named `HostGroup01` with a description and a restriction for a singular host type. 
 ```yaml
 sdp_hostgroup:
     name: "HostGroup01"

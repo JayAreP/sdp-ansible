@@ -17,11 +17,11 @@ The following parameters are permitted.
 
 ## Examples
 ### 1. 
-This example creates a snapshot object of the "VolumeGroup01" volume group, named "Snapshot01" against the "Backup" retention policy. 
+This example creates a snapshot object of the `VolumeGroup01` volume group, named `Snapshot01` against the `Backup` retention policy. 
 ```yaml
 sdp_volumegroupsnapshot: 
-    name: "Snapshot01"
-    volumegroup: "VolumeGroup01"
+    name: "ATSnap01"
+    volumegroup: "ATVG01"
     retentionpolicy: "Backup"
 ```
 
