@@ -22,3 +22,17 @@ sdp_volume:
     sizeInGB: 40
     volumegroup: "volumeGroup01"
 ```
+
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "name": string,
+        "size": int,
+        "volumegroup": string
+    }
+}
+```

@@ -23,3 +23,18 @@ sdp_snapshotview:
     snapshot: "ATSnap01"
     retentionpolicy: "Backup"
 ```
+
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "deletable": bool,
+        "exposable": bool,
+        "id": int,
+        "name": string,
+        "retentionpolicy": string
+    }
+}
+```

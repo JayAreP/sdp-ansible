@@ -32,3 +32,18 @@ sdp_retentionpolicy:
     weeks: 4
 ```
 
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "name": string,
+        "snapshots": string,
+        "weeks": string,
+        "days": string,
+        "hours": string
+     }
+}
+```

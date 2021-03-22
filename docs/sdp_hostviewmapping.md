@@ -20,3 +20,15 @@ sdp_hostmappingview:
 
 ```
 
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "hostname": string,
+        "volume": string
+    }
+}
+```

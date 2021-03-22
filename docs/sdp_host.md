@@ -19,7 +19,7 @@ The following parameters are permitted.
 
 ## Examples
 ### 1. 
-This example creates a host object named "LinuxHost" with 3 PWWNs. 
+This example creates a host object named `LinuxHost` with 3 PWWNs. 
 ```yaml
 sdp_host: 
     name: "testHost"
@@ -31,7 +31,7 @@ sdp_host:
 ```
 
 ### 2. 
-This example creates a host object named "WindowsHost" with no further initiator information. 
+This example creates a host object named `WindowsHost` with no further initiator information. 
 ```yaml
 sdp_host: 
     name: "windowsHost"
@@ -44,4 +44,19 @@ sdp_host:
     name: "windowsHost"
     type: "Windows"
     iqn: "iqn.1991-05.microsoft:windowshost"
+```
+
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "name": string,
+        "hostgroup": string,
+        "pwwn": string,
+        "iqn": string
+    }
+}
 ```

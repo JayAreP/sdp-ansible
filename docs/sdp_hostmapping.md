@@ -20,3 +20,15 @@ sdp_hostmapping:
     volumename: "Volume01"
 ```
 
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "hostname": string,
+        "volume": string
+    }
+}
+```

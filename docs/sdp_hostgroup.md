@@ -23,3 +23,16 @@ sdp_hostgroup:
     allowDifferentHostTypes: False
 ```
 
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "name": string,
+        "description": string,
+        "allowDifferentHostTypes": bool,
+    }
+}
+```

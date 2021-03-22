@@ -19,7 +19,7 @@ def main():
   module_args = dict(
     name=dict(type='str', required=True),
     snapshot=dict(type='str', required=True),
-    volumegroup=dict(type='str', required=True),
+    # volumegroup=dict(type='str', required=True),
     retentionpolicy=dict(type='str', required=True)
   )
 
@@ -54,8 +54,8 @@ def main():
   obj_request.short_name = vars["name"]
 
 # snapbase
-  finalsnapname = vars["volumegroup"] + ':' + vars["snapshot"]
-  snapsearch = sdp.search(sdpclass, name=finalsnapname)
+  # finalsnapname = vars["volumegroup"] + ':' + vars["snapshot"]
+  snapsearch = sdp.search(sdpclass, name=vars["snapshot"])
   if snapsearch.total == 1:
     snapbase = snapsearch.hits[0]
   elif snapsearch.total == 0:
@@ -80,7 +80,8 @@ def main():
   obj_request.is_exposable = True
 
 # Check to see if object already exists. 
-  finalviewname = vars["volumegroup"] + ':' + vars["name"]
+  volumegroup = vars["snapshot"].split(':')[0]
+  finalviewname = volumegroup + ':' + vars["name"]
   find = sdp.search(sdpclass, name=finalviewname)
 
 # If it does not, then save the above object as is.

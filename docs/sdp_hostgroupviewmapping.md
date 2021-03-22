@@ -20,3 +20,15 @@ sdp_hostgroupmappingview:
 
 ```
 
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "hostgroupname": string,
+        "volume": string
+    }
+}
+```

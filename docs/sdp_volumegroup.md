@@ -24,3 +24,16 @@ sdp_volumegroup:
     dedupe: True
 ```
 
+## Register response:
+```json
+{
+    "changed": bool,
+    "failed": bool,
+    "meta": {
+        "id": int,
+        "name": string,
+        "quota": int,
+        "dedupe": bool
+    }
+}
+```
