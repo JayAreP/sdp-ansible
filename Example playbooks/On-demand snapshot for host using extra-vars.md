@@ -3,10 +3,11 @@ Using 2 vars (`host` and `volumegroup`) this playbook will invoke a new snapshot
 
 ### Example 
 ```
-ansible-playbook test_sdp_snapshot_and_view_vars.yaml --extra-vars "host=ATH02 volumegroup=ATVG01"
+ansible-playbook on-demand-snapshot.yaml --extra-vars "host=ATH02 volumegroup=ATVG01"
 ```
 
-Using this playbook:
+Using this playbook:  
+File: `on-demand-snapshot.yaml`
 ```yaml
 - hosts: localhost
   vars: 
