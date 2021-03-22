@@ -30,5 +30,4 @@ Using this playbook:
       sdp_hostviewmapping:
         hostname: "{{ host }}"
         snapshotview: "{{ view.meta.name }}"
-      register: viewmap
 ```
