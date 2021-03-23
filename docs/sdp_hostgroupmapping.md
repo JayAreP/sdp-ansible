@@ -10,6 +10,9 @@ The following parameters are permitted.
 * `hostgroupname` - (`string`) - The name of the host group for this mapping. 
 * `volumename` - (`string`) - The name of the volume for this mapping. 
 
+### Optional
+* `remove` - (`bool`) - Remove the object. 
+
 
 ## Examples
 ### 1. 

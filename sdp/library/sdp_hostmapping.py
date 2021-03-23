@@ -18,7 +18,8 @@ sdpclass = "mappings"
 def main():
   module_args = dict(
     hostname=dict(type='str', required=True),
-    volumename=dict(type='str', required=True)
+    volumename=dict(type='str', required=True),
+    remove=dict(type='bool', required=False)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -74,6 +75,20 @@ def main():
       if f.host.id == host.id and f.volume.id == vol.id:
           sdpobj = f
           break
+
+# Custom removal since the query for sdpobj is so fubar
+  if vars["remove"] == True:
+    if "sdpobj" in globals():
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True
+      )
+    else:
+        module.exit_json(
+        changed=False,
+        removed=False
+      )
 
 # If it does not, then save the above object as is.
   try: sdpobj

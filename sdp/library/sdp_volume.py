@@ -85,7 +85,8 @@ def main():
   module_args = dict(
     name=dict(type='str', required=True),
     sizeInGB=dict(type='int', required=True),
-    volumegroup=dict(type='str', required=True)
+    volumegroup=dict(type='str', required=True),
+    remove=dict(type='bool', required=False)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -119,11 +120,25 @@ def main():
   obj_request.size = size
 
   findvg = sdp.search("volume_groups", name=vars["volumegroup"])
-  vg = findvg.hits[0]
-  obj_request.volume_group = vg
+  if len(findvg.hits) == 1:
+    vg = findvg.hits[0]
+    obj_request.volume_group = vg
 
 # Check to see if object already exists. 
   find = sdp.search(sdpclass, name=obj_request.name)
+  if vars["remove"] == True:
+    if len(find.hits) == 1:
+      sdpobj = find.hits[0]
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True
+      )
+    else:
+        module.exit_json(
+        changed=False,
+        removed=False
+      )
 
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:

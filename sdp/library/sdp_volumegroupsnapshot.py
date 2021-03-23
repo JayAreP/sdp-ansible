@@ -21,7 +21,8 @@ def main():
     volumegroup=dict(type='str', required=True),
     retentionpolicy=dict(type='str', required=True),
     exposable=dict(type='bool', required=False, default=True),
-    deletable=dict(type='bool', required=False, defaul=True)
+    deletable=dict(type='bool', required=False, defaul=True),
+    remove=dict(type='bool', required=False)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -81,6 +82,19 @@ def main():
 
 # Check to see if object already exists. 
   find = sdp.search(sdpclass, name=finalsnapname)
+  if vars["remove"] == True:
+    if len(find.hits) == 1:
+      sdpobj = find.hits[0]
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True
+      )
+    else:
+        module.exit_json(
+        changed=False,
+        removed=False
+      )
 
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:

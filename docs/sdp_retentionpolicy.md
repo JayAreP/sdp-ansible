@@ -14,6 +14,7 @@ The following parameters are permitted.
 * `weeks` - (`int`) - The desired length of time in weeks in which to keep this policy. 
 * `days` - (`int`) - The desired length of time in days in which to keep this policy. 
 * `hours` - (`int`) - The desired length of time in hours in which to keep this policy. 
+* `remove` - (`bool`) - Remove the object. 
 
 ## Examples
 ### 1. 

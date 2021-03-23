@@ -14,6 +14,7 @@ The following parameters are permitted.
 ### Optional
 * `exposable` - (`bool`) - Sets the exposable flag for the snapshot. 
 * `deletable` - (`bool`) - Sets the deletable flag for the snapshot. 
+* `remove` - (`bool`) - Remove the object. 
 
 ## Examples
 ### 1. 

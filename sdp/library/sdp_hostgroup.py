@@ -78,7 +78,8 @@ def main():
   module_args = dict(
     name=dict(type='str', required=True),
     description=dict(type='str', required=False),
-    allowDifferentHostTypes=dict(type='bool', required=False)
+    allowDifferentHostTypes=dict(type='bool', required=False),
+    remove=dict(type='bool', required=False)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -115,6 +116,19 @@ def main():
 
 # Check to see if object already exists. 
   find = sdp.search(sdpclass, name=obj_request.name)
+  if vars["remove"] == True:
+    if len(find.hits) == 1:
+      sdpobj = find.hits[0]
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True
+      )
+    else:
+        module.exit_json(
+        changed=False,
+        removed=False
+      )
 
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:

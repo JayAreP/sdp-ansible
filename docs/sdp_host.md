@@ -15,7 +15,8 @@ The following parameters are permitted.
 
 ### Optional
 * `pwwn` - (`list`) - The desired list of port WWNs for the host object. 
-* `iqn` - (`string`) - The desired iSCSI initiator name (iqn) for the host object. 
+* `iqn` - (`string`) - The desired iSCSI initiator name (iqn) for the host object.
+* `remove` - (`bool`) - Remove the object.  
 
 ## Examples
 ### 1. 

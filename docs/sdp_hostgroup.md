@@ -12,6 +12,7 @@ The following parameters are permitted.
 ### Optional
 * `description` - (`string`) - The desired description text for the host group. 
 * `allowDifferentHostTypes` - (`bool`) - Enable (or disable) the ability to permit mixed host types within this group. 
+* `remove` - (`bool`) - Remove the object. Host Groups must be empty prior to removal. 
 
 ## Examples
 ### 1. 

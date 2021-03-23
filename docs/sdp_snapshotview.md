@@ -12,6 +12,8 @@ The following parameters are permitted.
 * `snapshot` - (`string`) - The name of the snapshot that the view is being created for. 
 * `retentionpolicy` - (`string`) - The retention policy for the view to be created against. 
 
+### Optional
+* `remove` - (`bool`) - Remove the object. 
 
 ## Examples
 ### 1. 

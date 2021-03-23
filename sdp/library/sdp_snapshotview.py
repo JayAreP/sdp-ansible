@@ -20,7 +20,8 @@ def main():
     name=dict(type='str', required=True),
     snapshot=dict(type='str', required=True),
     # volumegroup=dict(type='str', required=True),
-    retentionpolicy=dict(type='str', required=True)
+    retentionpolicy=dict(type='str', required=True),
+    remove=dict(type='bool', required=False)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -83,6 +84,19 @@ def main():
   volumegroup = vars["snapshot"].split(':')[0]
   finalviewname = volumegroup + ':' + vars["name"]
   find = sdp.search(sdpclass, name=finalviewname)
+  if vars["remove"] == True:
+    if len(find.hits) == 1:
+      sdpobj = find.hits[0]
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True
+      )
+    else:
+        module.exit_json(
+        changed=False,
+        removed=False
+      )
 
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:

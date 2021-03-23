@@ -20,7 +20,8 @@ def main():
     name=dict(type='str', required=True),
     dedupe=dict(type='bool', required=False, default=True),
     capacityPolicy=dict(type='bool', required=False),
-    quotaInGB=dict(type='int', required=False, default=0)
+    quotaInGB=dict(type='int', required=False, default=0),
+    remove=dict(type='bool', required=False)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -55,7 +56,20 @@ def main():
 
 # Check to see if object already exists. 
   find = sdp.search(sdpclass, name=obj_request.name)
-
+  if vars["remove"] == True:
+    if len(find.hits) == 1:
+      sdpobj = find.hits[0]
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True
+      )
+    else:
+        module.exit_json(
+        changed=False,
+        removed=False
+      )
+      
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
     try:

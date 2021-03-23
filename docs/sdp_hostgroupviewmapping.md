@@ -10,6 +10,9 @@ The following parameters are permitted.
 * `hostgroupname` - (`string`) - The desired name for the host group object.
 * `snapshotname` - (`string`) - The desired name for the snapshot view object. This should include the entire name string in the form of volumegroup:snapshotview. 
 
+### Optional
+* `remove` - (`bool`) - Remove the object. 
+
 ## Examples
 ### 1. 
 This example creates a mapping action for the host `ATH01` to the snapshot view named `ATSnap01-view` in the volumegroup `ATVG01`.

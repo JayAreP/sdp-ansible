@@ -12,6 +12,7 @@ The following parameters are permitted.
 ### Optional
 * `quotaInGB` - (`int`) - The desired quota (in GB) for the volume group object. 
 * `dedupe` - (`bool`) - Enable (or disable) de-duplication for volumes contained in this volume group. 
+* `remove` - (`bool`) - Remove the object. Volume Groups must be empty prior to removal. 
 
 
 ## Examples

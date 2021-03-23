@@ -104,7 +104,8 @@ def main():
     type=dict(type='str', required=True),
     iqn=dict(type='str', required=False),
     pwwn=dict(type='list', required=False),
-    hostgroup=dict(type='str', required=False)
+    hostgroup=dict(type='str', required=False),
+    remove=dict(type='bool', required=False)
   )
 
   module = AnsibleModule(argument_spec=module_args)
@@ -136,6 +137,19 @@ def main():
 
 # Check to see if object already exists. 
   find = sdp.search(sdpclass, name=obj_request.name)
+  if vars["remove"] == True:
+    if len(find.hits) == 1:
+      sdpobj = find.hits[0]
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True
+      )
+    else:
+        module.exit_json(
+        changed=False,
+        removed=False
+      )
 
 # If it does not, then save the above object as is.
   if len(find.hits) == 0:
@@ -154,7 +168,8 @@ def main():
     find = sdp.search(sdpclass, name=obj_request.name)
     sdpobj = find.hits[0]
     findhg = sdp.search("host_groups", name=vars["hostgroup"])
-    hg = findhg.hits[0]
+    if len(findhg.hits) == 1:
+      hg = findhg.hits[0]
     if sdpobj.host_group:
       if sdpobj.host_group.name == vars["hostgroup"]:
         changed=False

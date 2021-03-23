@@ -12,6 +12,7 @@ The following parameters are permitted.
 
 ### Optional
 * `volumegroup` - (`string`) - The desired volume group name for the volume object. 
+* `remove` - (`bool`) - Remove the object. 
 
 ## Examples
 ### 1. 
