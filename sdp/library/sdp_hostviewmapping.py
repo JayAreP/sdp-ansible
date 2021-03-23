@@ -126,26 +126,31 @@ def main():
   find = sdp.search(sdpclass, __limit=9999)
   for f in find.hits:
       if f.host.id == host.id and f.volume.id == view.id:
-          sdpobj = f
-          break
+        sdpobj = f
+        break
+
+# Since python can't simply test if a var exists...
+  try: sdpobj
+  except NameError: sdpobj = None
 
 # Custom removal since the query for sdpobj is so fubar
   if vars["remove"] == True:
-    if "sdpobj" in globals():
-      sdpobj.delete()
-      module.exit_json(
-        changed=True,
-        removed=True
-      )
-    else:
+    if sdpobj == None:
         module.exit_json(
         changed=False,
         removed=False
       )
+    elif sdpobj != None:
+      sdpobj.delete()
+      module.exit_json(
+        changed=True,
+        removed=True,
+        id=sdpobj.id
+      )
+
+
 
 # If it does not, then save the above object as is.
-  try: sdpobj
-  except NameError: sdpobj = None
   if sdpobj is None:
     try:
         result = obj_request.save()

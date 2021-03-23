@@ -88,7 +88,8 @@ def main():
       sdpobj.delete()
       module.exit_json(
         changed=True,
-        removed=True
+        removed=True,
+        id=sdpobj.id
       )
     else:
         module.exit_json(
